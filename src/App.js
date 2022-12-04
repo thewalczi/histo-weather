@@ -1,23 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useEffect, useState} from 'react'
+// import axios from 'axios'
+import { Canvas } from './components/Canvas';
+import { api } from './api/dataApi';
 
 function App() {
+  const [data, setData] = useState()
+  useEffect(() => {
+    (async () => {
+      const data = await api.get('/forecast', {params: {latitude: 41.85, longitude: -87.65, past_days: 10, timezone: "Europe/Berlin", daily: 'temperature_2m_max,temperature_2m_min'}})
+      setData(data.data)
+    })()
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Canvas data={data}/>
     </div>
   );
 }
